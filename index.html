@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GESTURE//SPEAK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>
+  // Applied before paint to avoid a flash of the wrong theme on load.
+  (function () {
+    var saved = localStorage.getItem("gestureSpeak.theme");
+    if (saved === "dark") document.documentElement.dataset.theme = "dark";
+  })();
+</script>
+</head>
+<body>
+
+<button id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme">
+  <span class="theme-icon" aria-hidden="true">🌙</span>
+</button>
+
+<header class="topbar">
+  <div class="eyebrow">Hand gesture recognizer</div>
+  <h1 class="hero-title">Gesture // Speak</h1>
+  <p class="hero-subtitle">Show your hand to the camera. It reads the shape, names it, and says it out loud.</p>
+</header>
+
+<main class="stage">
+
+  <section class="viewfinder-wrap">
+    <div id="viewfinder" class="viewfinder" data-state="idle">
+      <video id="webcam" autoplay playsinline muted></video>
+      <canvas id="overlay"></canvas>
+      <div id="viewfinderMessage" class="viewfinder-message">
+        <p>Camera is off</p>
+        <button id="startBtn" class="start-btn">Turn on camera</button>
+      </div>
+      <div class="hud-corner-readout" id="cornerReadout">Hands: 0</div>
+    </div>
+
+    <div class="viewfinder-actions">
+      <button id="stopBtn" class="stop-btn" disabled>Turn off camera</button>
+    </div>
+
+    <div class="panel-block gesture-bubble">
+      <div class="panel-label">Detected gesture</div>
+      <div id="gestureReadout" class="gesture-readout" aria-live="polite">— · —</div>
+    </div>
+  </section>
+
+  <aside class="panel">
+
+    <div class="panel-block controls">
+      <div class="toggle-row">
+        <label class="switch">
+          <input type="checkbox" id="voiceToggle" checked>
+          <span class="slider"></span>
+        </label>
+        <span class="toggle-label">Speak gestures aloud</span>
+      </div>
+      <div class="toggle-row">
+        <label class="switch">
+          <input type="checkbox" id="mirrorToggle" checked>
+          <span class="slider"></span>
+        </label>
+        <span class="toggle-label">Mirror view</span>
+      </div>
+      <div class="toggle-row">
+        <label class="switch">
+          <input type="checkbox" id="cameraToggle" disabled>
+          <span class="slider"></span>
+        </label>
+        <span class="toggle-label">Use rear camera</span>
+      </div>
+      <div class="toggle-row">
+        <label class="switch">
+          <input type="checkbox" id="emotionToggle" checked>
+          <span class="slider"></span>
+        </label>
+        <span class="toggle-label">Show face emotion</span>
+      </div>
+    </div>
+
+    <div class="panel-block">
+      <div class="panel-label">Recognized gestures</div>
+      <ul class="gesture-legend">
+        <li><span>✋</span>Hello</li>
+        <li><span>✊</span>Help</li>
+        <li><span>👍</span>I Agree</li>
+        <li><span>👎</span>Nope</li>
+        <li><span>✌️</span>Peace</li>
+        <li><span>☝️</span>Point</li>
+        <li><span>👌</span>OK</li>
+        <li><span>🤟</span>I Love You</li>
+        <li><span>🤙🏻</span>Call Me</li>
+        <li><span>🤌🏻</span>Pinched Fingers</li>
+        <li><span>🫶🏻</span>Heart Hands (2 hands)</li>
+        <li><span>👉🏻👈🏻</span>Shy (2 hands)</li>
+      </ul>
+    </div>
+
+    <div class="panel-block">
+      <div class="panel-label">Your custom gestures</div>
+      <div class="record-row">
+        <input type="text" id="customNameInput" placeholder="Name this gesture…" maxlength="24">
+        <button id="recordBtn" class="mini-btn" disabled>Record</button>
+      </div>
+      <p id="recordStatus" class="record-status"></p>
+      <ul id="customList" class="custom-gesture-list"></ul>
+      <div class="file-row">
+        <button id="exportBtn" class="mini-btn ghost">Export</button>
+        <label for="importInput" class="mini-btn ghost file-label">Import</label>
+        <input type="file" id="importInput" accept="application/json" hidden>
+      </div>
+    </div>
+
+  </aside>
+
+</main>
+
+<footer class="log-ticker">
+  <div class="log-label">Detection log</div>
+  <ul id="logList" class="log-list"></ul>
+</footer>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
